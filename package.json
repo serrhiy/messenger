@@ -20,7 +20,7 @@
     "url": "https://github.com/serrhiy/messanger/issues"
   },
   "scripts": {
-    "test": "npm run -s lint",
+    "test": "npm run -s lint && node --test",
     "lint": "eslint . && prettier -c \"**/*.js\" \"**/*.json\"",
     "fix": "eslint . --fix && prettier --write \"**/*.js\" \"**/*.json\""
   },
