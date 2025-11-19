@@ -16,7 +16,13 @@ const buildNumber = (count) => {
   return number;
 };
 
-const buildDialog = (user, avatar, text = '', date = '', unreadMessages = 0) => {
+const buildDialog = (
+  user,
+  avatar,
+  text = '',
+  date = '',
+  unreadMessages = 0,
+) => {
   const chat = document.createElement('div');
   const img = document.createElement('img');
   const info = document.createElement('div');
@@ -89,10 +95,15 @@ export default class Dialog extends EventTarget {
       const lastMessage = messages.at(-1);
       const { message } = lastMessage;
       const time = transformDate(lastMessage.createdAt);
-      this.#dialog = buildDialog(name, user.avatar, message, time, unreadMessages);
+      this.#dialog = buildDialog(
+        name,
+        user.avatar,
+        message,
+        time,
+        unreadMessages,
+      );
       this.#unreadMessages = unreadMessages;
-    }
-    else {
+    } else {
       this.#dialog = buildDialog(name, user.avatar);
     }
     const messagesArea = new Messages(user, messages);

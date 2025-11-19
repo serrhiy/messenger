@@ -14,4 +14,17 @@ module.exports = [
       sourceType: 'module',
     },
   },
+  {
+    files: ['test/**/*.js'],
+    rules: {
+      strict: 'off',
+      camelcase: 'off',
+    },
+    languageOptions: {
+      globals: {
+        application: true,
+        lib: true,
+      },
+    },
+  },
 ];

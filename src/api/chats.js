@@ -22,7 +22,7 @@
       const me = await db('users').select('id').where({ token }).first();
       const [chat] = await db('chats').insert({}).returning(this.fields);
       const promises = [...users, me.id].map((userId) =>
-        db('usersChats').insert({ userId, chatId: chat.id })
+        db('usersChats').insert({ userId, chatId: chat.id }),
       );
       await Promise.all(promises);
       events.emit('chat', chat, cookie.get('token'));
@@ -65,7 +65,7 @@
       const data = await db('usersChats')
         .select(this.fields)
         .join('users', { userId: 'id' })
-        .where({ chatId: id });  
+        .where({ chatId: id });
       return { success: true, data };
     },
   },
@@ -77,7 +77,7 @@
     },
     controller: async ({ chatId }, cookie) => {
       const token = cookie.get('token');
-      const { id } = await db('users').select(['id']).where({ token }).first();      
+      const { id } = await db('users').select(['id']).where({ token }).first();
       await db('usersChats')
         .update({ lastTimeInChat: db.fn.now() })
         .where({ userId: id, chatId });

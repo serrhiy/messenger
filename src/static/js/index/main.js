@@ -5,7 +5,10 @@ import api from '../api.js';
 import Dialog from './Dialog.js';
 import chats from './Chats.js';
 
-const pipe = (...fns) => (x) => fns.reduce((val, fn) => fn(val), x);
+const pipe =
+  (...fns) =>
+  (x) =>
+    fns.reduce((val, fn) => fn(val), x);
 
 const searchInput = document.getElementById('search-input');
 const chatList = document.getElementById('chat-list');
@@ -14,22 +17,23 @@ const dialogFactory = (me, user, chat = {}, messages = []) => {
   const dialog = new Dialog(me, user, chat, messages);
   dialog.addEventListener('message', async (event) => {
     const { detail: message } = event;
-    await api.messages.create({ chatId: chat.id,  message });
+    await api.messages.create({ chatId: chat.id, message });
     await api.chats.updateOnline({ chatId: chat.id });
   });
   dialog.addEventListener('click', async () => {
     await api.chats.updateOnline({ chatId: chat.id });
   });
   return dialog;
-}
+};
 
 const onSearchUser = (me) => async () => {
   const { value } = searchInput;
   chatList.innerHTML = '';
   if (value.length === 0) return;
   const users = await api.users.read({ firstName: value, username: value });
-  const dialogs = users.filter((user) => (
-    user.id !== me.id && !chats.find((chat) => chat.user.id === user.id))
+  const dialogs = users.filter(
+    (user) =>
+      user.id !== me.id && !chats.find((chat) => chat.user.id === user.id),
   );
   for (const user of dialogs) {
     const { lastOnline: lastTimeInChat } = user;
@@ -45,7 +49,7 @@ const onSearchUser = (me) => async () => {
       dialog.makeActive();
       chats.push(dialog);
       chats.draw();
-      searchInput.value = ''
+      searchInput.value = '';
     });
     chat.generate();
   }
@@ -67,7 +71,7 @@ const types = {
     const chat = chats.find((chat) => chat.chat.id === chatId);
     chat.addMessage(text);
     if (chat.isActive()) await api.chats.updateOnline({ chatId });
-  }
+  },
 };
 
 const start = async () => {
@@ -97,4 +101,3 @@ const start = async () => {
 const main = pipe(setResizing, start);
 
 main();
-
